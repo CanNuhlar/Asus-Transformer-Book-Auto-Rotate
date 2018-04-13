@@ -8,7 +8,7 @@ from subprocess import call
 is_flipped = False
 auto_rotate_on = True
 current_rotation = "normal"
-
+fetch_interval = 3
 
 class lid_acpi_message_listener(threading.Thread):
 	def __init__(self):
@@ -16,6 +16,7 @@ class lid_acpi_message_listener(threading.Thread):
 
 	def run(self):
 		global is_flipped, current_rotation
+		print("Started acpi listener.")
 		while True:
 			s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 			s.connect('/var/run/acpid.socket')
@@ -34,10 +35,10 @@ class auto_rotate_screen(threading.Thread):
 
 	def run(self):
 		global is_flipped, current_rotation
-		print("running")
+		print("Started orientation listener.")
 		while True:
 			if is_flipped and auto_rotate_on:
-				print("Lid flipped ", is_flipped)
+				print("Tablet mode ", is_flipped)
 				#read x axis
 				with open('/sys/bus/iio/devices/iio:device0/in_accel_x_raw') as fp:
 					accel_x = int(fp.readline())
@@ -72,17 +73,18 @@ class auto_rotate_screen(threading.Thread):
 					current_rotation = "inverted"
 					call(["xrandr", "-o", "inverted"])
 
-				time.sleep(3)
+				time.sleep(fetch_interval)
 
 
-lid_listener = lid_acpi_message_listener()
-lid_listener.daemon = True
+if __name__ == "__main__":
+	lid_listener = lid_acpi_message_listener()
+	lid_listener.daemon = True
 
-lid_listener.start()
-#lid_listener.join()
+	lid_listener.start()
+	#lid_listener.join()
 
-auto_rotate = auto_rotate_screen()
-auto_rotate.daemon = True
+	auto_rotate = auto_rotate_screen()
+	auto_rotate.daemon = True
 
-auto_rotate.start()
-auto_rotate.join()
+	auto_rotate.start()
+	auto_rotate.join()
