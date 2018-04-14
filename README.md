@@ -19,7 +19,7 @@ On Debian:
 
 Clone the repo or download as zip. Make py file executable 
 
-    chmod +x rotate.py
+    chmod +x rotate
    
 Run manually or set it up as a startup program. Auto rotation of X server will be enabled when you flip your lid (a.k.a. enable tablet mode) 
 
