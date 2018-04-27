@@ -46,6 +46,7 @@ class lid_acpi_message_listener(threading.Thread):
 					call(["xinput", "set-prop", "Elan Touchpad", "Device Enabled", "1"])
 					if libinput_gestures_exist:
 						call(["libinput-gestures-setup", "start"])
+			time.sleep(fetch_interval)
 
 class auto_rotate_screen(threading.Thread):
 	def __init__(self):
@@ -90,7 +91,7 @@ class auto_rotate_screen(threading.Thread):
 					current_rotation = "inverted"
 					call(["xrandr", "-o", "inverted"])
 
-				time.sleep(fetch_interval)
+			time.sleep(fetch_interval)
 
 
 if __name__ == "__main__":
