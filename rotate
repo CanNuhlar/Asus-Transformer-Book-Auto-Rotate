@@ -9,7 +9,7 @@ is_flipped = False
 auto_rotate_on = True
 current_rotation = "normal"
 fetch_interval = 3 #check every 3 seconds
-debug_messages = False #enable to debug
+debug_messages = True #enable to debug
 
 
 def print_log(log_message):
